@@ -374,21 +374,5 @@ Other analytical queries included:
 
 ---
 
-## 11. Data Engineering Interview Talking Points
-
-### 1. Why a Star Schema instead of One Big Table (OBT)?
-> *"While OBT is popular in columnar cloud warehouses like BigQuery or Snowflake for simple reporting, a Star Schema in Azure SQL Database significantly reduces storage redundancy, maintains referential integrity via Foreign Keys, and allows independent dimension evolution (e.g., updating category hierarchies or seller addresses without touching hundreds of thousands of historical sales records). It also enables role-playing date dimensions (`purchase_date`, `delivered_date`, `estimated_date`) with zero data duplication."*
-
-### 2. How did you handle high-throughput loading in Python + Azure SQL?
-> *"Default `pandas.DataFrame.to_sql()` issues row-by-row `INSERT INTO` statements, taking 15+ minutes for 100k rows across a public cloud connection. By pairing SQLAlchemy with `fast_executemany=True` on the `pyodbc` cursor and tuning `chunksize=5000`, ODBC passes parameter arrays directly to SQL Server in batches. This reduced total staging load times from 15 minutes to under 40 seconds."*
-
-### 3. How do you guarantee pipeline idempotency?
-> *"Data pipelines must be re-runnable without side effects. In our design, staging tables are truncated upon each run. Dimension loads leverage T-SQL `MERGE` to update changed records and insert new ones based on natural business keys. Fact loads leverage `INSERT ... WHERE NOT EXISTS` on the primary composite keys `(order_id, order_item_id)`. If the pipeline fails midway or is re-executed, no duplicate financial transactions are created."*
-
-### 4. How did you resolve the customer identity quirk in Olist?
-> *"The raw dataset assigns a new `customer_id` for every order. Treating `customer_id` as the customer key would distort business analytics into showing a 0% repeat-purchase rate. We identified `customer_unique_id` as the persistent human identifier, keyed `dim_customer` on `customer_unique_id`, and deduplicated historical customer addresses to reflect accurate customer retention metrics."*
-
----
-
 ## License
 MIT License. Created for portfolio demonstration and production reference.
