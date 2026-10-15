@@ -1,0 +1,38 @@
+# Environment variables & secrets
+.env
+.env.local
+.env.*.local
+
+# Data files (raw CSVs and processed Parquet)
+data/raw/*.csv
+data/processed/*.parquet
+!data/raw/README.md
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Logs
+logs/*.log
+!logs/.gitkeep
+
+# Python bytecode & cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Virtual environment & IDE
+.venv/
+env/
+venv/
+ENV/
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
